@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="js/MyTool/compatibility.js"></script>
+		<script type="text/javascript" src="js/jquery3.0.0/jquery.min.js" ></script>
+		<script type="text/javascript" src="js/demo/demo.js"></script>
+		<script type="text/javascript" src="js/demo/utils.js"></script>
+		<script type="text/javascript" src="js/Tween/Tween.js"></script>
+		<title></title>
+		<style type="text/css">
+			body{margin:0px;padding:0px;background: lavenderblush;}
+			
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas"></canvas>
+		<script type="text/javascript">
+			var canvas,context,foods=[],numFood=200,snakes=[],numSnake=5,snakePositionX,snakePositionY,mouse,min_index=2,snakeAdd=0;
+			var _dom=document;
+			var _win=window;
+			_win.addEventListener("load",function (){
+				
+				canvas=_dom.getElementById("canvas");
+				canvas.height=phoneheight;
+				canvas.width=phonewidth;
+				context=canvas.getContext("2d");
+				mouse=utils.captureMouse(canvas);
+				
+				snakePositionX=Math.random()*canvas.width;
+				snakePositionY=Math.random()*canvas.height;
+				if(snakePositionX>canvas.width-180){
+					snakePositionX=canvas.width-180;
+				}
+				if(snakePositionX<0){
+					snakePositionX=0;
+				}
+				snakeColor=Math.random()*0xffffff;
+				
+				for(var  ball,i=0;i<numFood;i++){
+					ball=new Ball(3,Math.random()*0xffffff);
+					ball.mass=ball.radius;
+					ball.x=Math.random()*canvas.width;
+					ball.y=Math.random()*canvas.height;
+					foods.push(ball);
+				}
+				for(var snake,i=0;i<numSnake;i++){
+					snake=new Ball(10,snakeColor);
+					snake.mass=100;
+					snake.x=snakePositionX+i*18;
+					snake.y=snakePositionY;
+					snake.vx=0;
+					snake.vy=0;
+					snakes.push(snake);
+				}
+				
+				function moveSnakes(snake1,snake2){
+					var dx=snake1.x-snake2.x,
+					dy=snake1.y-snake2.y,
+					distSQ=dx*dx+dy*dy,
+					min_dist=snake1.radius+snake2.radius,
+					dist=Math.sqrt(distSQ);
+					
+					if(dist>min_dist){
+						var angle=Math.atan2(dy,dx);
+						
+						tx=Math.cos(angle)*min_index,
+						ty=Math.sin(angle)*min_index;
+						
+						snake2.x+=tx;
+						snake2.y+=ty;
+					}
+				}
+				function direction(snake){
+					snake.x=mouse.x;
+					snake.y=mouse.y;
+				}
+				
+				//吞吃食物
+				function fooding(snake,food){
+					var dx=food.x-snake.x,
+					dy=food.y-snake.y,
+					distSQ=dx*dx+dy*dy,
+					dist=Math.sqrt(distSQ),
+					force=snake.mass*food.mass/distSQ,
+					ax=force*dx/dist,
+					ay=force*dy/dist;
+
+					food.x -= ax/food.mass;
+					food.y -= ay/food.mass;
+					
+					if(dist<snake.radius+food.radius){
+						food.x=Math.random()*canvas.width;
+						food.y=Math.random()*canvas.height;
+						snakeAdd++
+					}
+					if(snakeAdd>=15){
+						var snake=new Ball(10,snakeColor);
+						snake.x=snakes[snakes.length-1].x+18;
+						snake.y=snakes[snakes.length-1].y;
+						snakes.push(snake);
+						snakeAdd=0;
+					}
+				}
+				(function draw(){
+					_win.requestAnimationFrame(draw);
+					context.clearRect(0,0,canvas.width,canvas.height);
+					foods.forEach(draws);
+
+					for(var i=0;i<snakes.length-1;i++){
+						moveSnakes(snakes[i],snakes[i+1]);
+					}
+					for(var i=0;i<foods.length;i++){
+						fooding(snakes[1],foods[i]);
+					}
+					direction(snakes[0]);
+					snakes.forEach(draws);
+				}());
+				
+				function draws(ob){
+					ob.draw(context);
+				}
+				canvas.addEventListener("mousedown",function (){
+					min_index=5;
+					snakes[1].mass=500;
+				},false);
+				canvas.addEventListener("mouseup",function (){
+					min_index=2;
+					snakes[1].mass=100;
+				},false);
+				
+			},false);
+		</script>
+	</body>
+</html>

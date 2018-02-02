@@ -1,0 +1,533 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>马里奥GAME</title>
+    <style>
+        body{margin:0px;padding:0px;}
+        #canvas{
+            border:solid 1px black;
+            position:absolute;
+            top:25%;
+            left:25%;
+            z-index:10;
+        }
+        .imgs {
+            position: absolute;
+            /*
+            display:none;
+            */ 
+        }
+        .oneImg {
+            top: 50%;
+            left: 50%;
+            margin-top: -107px;
+            margin-left: -60px;
+            z-index: 5;
+            /*
+            display:none;
+            */
+            display: none;
+        }
+        .twoImg {
+            top: 50%;
+            left: 35%;
+            margin-top: -107px;
+            margin-left: -60px;
+            z-index: 5;
+            /*
+            display:none;
+            */
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <img class="imgs oneImg" src="1.png" />
+    <img class="imgs twoImg" src="2.png" />
+    <script type="text/javascript" src="header.js"></script>
+    <script type="text/javascript">
+        var canvas, ctx;
+        window.addEventListener("load", function () {
+            canvas = document.getElementById("canvas");
+            canvas.width = phonewidth*0.5;
+            canvas.height = phoneheight*0.5;
+            ctx = canvas.getContext("2d");
+
+
+            var m = new mario();
+            m.x = 400;
+            m.y = 192;
+            m.scaleX = 1;
+            m.scaleY = 1;
+            m.mouthClose = false;
+
+            m.method();
+            
+            function anima(mario) {
+                mario.handLeft(ctx);
+                mario.footLeft(ctx);
+                mario.footRight(ctx);
+                mario.head(ctx);
+                mario.hair(ctx);
+                mario.eye(ctx);
+                mario.body(ctx);
+                mario.anniu(ctx);
+                mario.handRight(ctx);
+            }
+
+            (function draw() {
+                window.requestAnimationFrame(draw);
+                ctx.clearRect(0, 0, ctx.width, ctx.height);
+                m.handLeftRotate = -40; //-150;//-40;
+                m.handRightRotate = 0;
+                m.footRightRotate = 20;
+                m.footLeftRotate = -20;
+
+                anima(m);
+            }())
+        }, false);
+        var mario = function () {
+            this.x = 0;
+            this.y = 0;
+            this.mouthClose = false;
+            this.scaleX = 1;
+            this.scaleY = 1;
+            this.handLeftRotate = 0;
+            this.handRightRotate = 0;
+            this.footRightRotate = 0;
+            this.footLeftRotate = 0;
+
+            this.eyeScaleX = 0.5;
+            this.eyeScaleY = 1;
+            this.hairScaleX = 1;
+            this.hairScaleY = 1;
+            this.headScaleX = 1;
+            this.headScaleY = 1;
+            this.bodyScaleX = 1;
+            this.bodyScaleY = 1 ;
+            this.handLeftScaleX = 1;
+            this.handLeftScaleY = 1;
+            this.handRightScaleX = 1;
+            this.handRightScaleY = 1;
+            this.footRightScaleX = 1;
+            this.footRightScaleY = 1;
+            this.footLeftScaleX = 1;
+            this.footLeftScaleY = 1;
+        }
+        mario.prototype = {
+            method: function () {
+                this.eyeScaleX = this.scaleX * 0.5;
+                this.eyeScaleY = this.scaleY * 1;
+                this.hairScaleX = this.scaleX * 1;
+                this.hairScaleY = this.scaleY * 1;
+                this.headScaleX = this.scaleX * 1;
+                this.headScaleY = this.scaleY * 1;
+                this.bodyScaleX = this.scaleX * 1;
+                this.bodyScaleY = this.scaleY * 1;
+                this.handLeftScaleX = this.scaleX * 1;
+                this.handLeftScaleY = this.scaleY * 1;
+                this.handRightScaleX = this.scaleX * 1;
+                this.handRightScaleY = this.scaleY * 1;
+                this.footRightScaleX = this.scaleX * 1;
+                this.footRightScaleY = this.scaleY * 1;
+                this.footLeftScaleX = this.scaleX * 1;
+                this.footLeftScaleY = this.scaleY * 1;
+            },
+            footRight:function(context){
+                context.save();
+                context.translate(this.x-18, this.y+18);
+                context.scale(this.footRightScaleX, this.footRightScaleY);
+                context.rotate(this.footRightRotate * Math.PI / 180);
+                context.beginPath();
+                context.arc(0, 0 , 0, 0, (Math.PI * 2), true);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+
+                context.beginPath();
+                context.moveTo(10, 32);
+                context.lineTo(10, 0);
+                context.lineTo(-10, 0);
+                context.lineTo(-10, 32);
+                context.lineTo(-10, 40);
+                context.quadraticCurveTo(-18, 52, -10, 65);
+                context.lineTo(30, 65);
+                context.bezierCurveTo(40, 50, 25, 30, 10, 40);
+                context.lineTo(10, 32);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#8F5226";
+                context.fill();
+                context.closePath();
+
+                context.beginPath();
+                context.moveTo( -10, 65);
+                context.lineTo(-13, 70);
+                context.lineTo(27, 70);
+                context.lineTo(30, 65);
+                context.lineTo(-10, 65);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#FFFFFF";
+                context.fill();
+                context.closePath();
+
+                context.restore();
+            },
+            footLeft: function (context) {
+                context.save();
+                context.translate(this.x + 5, this.y + 18);
+                context.scale(this.footLeftScaleX, this.footLeftScaleY);
+                context.rotate(this.footLeftRotate * Math.PI / 180);
+                context.beginPath();
+                context.arc(0, 0, 0, 0, (Math.PI * 2), true);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+
+                context.beginPath();
+                context.moveTo(10, 32);
+                context.lineTo(10, 0);
+                context.lineTo(-10, 0);
+                context.lineTo(-10, 32);
+                context.lineTo(-10, 40);
+                context.quadraticCurveTo(-18, 52, -10, 65);
+                context.lineTo(30, 65);
+                context.bezierCurveTo(40, 50, 25, 30, 10, 40);
+                context.lineTo(10, 32);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#8F5226";
+                context.fill();
+                context.closePath();
+
+                context.beginPath();
+                context.moveTo(-10, 65);
+                context.lineTo(-13, 70);
+                context.lineTo(27, 70);
+                context.lineTo(30, 65);
+                context.lineTo(-10, 65);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#FFFFFF";
+                context.fill();
+                context.closePath();
+
+                context.restore();
+            },
+            handLeft: function (context) {
+                context.save();
+
+                context.translate(this.x+10, this.y-5);
+                context.scale(this.handLeftScaleX, this.handLeftScaleY);
+                context.rotate(this.handLeftRotate * Math.PI / 180);
+                context.beginPath();
+                context.arc(0, 0, 3, 0, (Math.PI * 2), true);
+                context.fillStyle = "#000000";
+                context.fill();
+                context.closePath();
+
+                //手臂
+                context.beginPath();
+                context.moveTo(0, 0);
+                context.lineTo(-10, -5);
+                context.quadraticCurveTo(-17, 1, 0 - 26, 23);
+                context.quadraticCurveTo(-13, 13, -3, 0 + 25);
+                context.lineTo(0, 0);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#B21D17";
+                context.fill();
+                context.closePath();
+                //手
+                context.beginPath();
+                context.moveTo(-33, 28);
+                context.quadraticCurveTo(-13, 13, -3, 25);
+                context.lineTo(-3, 33);
+                context.lineTo(-8, 30);
+                context.lineTo(-3, 33);
+                context.quadraticCurveTo(17, 50, -3, 53);
+                context.lineTo(5, 53);
+                context.bezierCurveTo(5, 73, -33, 68, -36, 53);
+                context.lineTo(-36, 43);
+                context.lineTo(-33, 33);
+                context.lineTo(-33, 28);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#FFFFFF";
+                context.fill();
+                context.closePath();
+
+                context.beginPath();
+                context.moveTo(5, 50);
+                context.quadraticCurveTo(-10, 65, -15, 45);
+                context.moveTo(-15, 50);
+                context.quadraticCurveTo(-20, 40, -30, 50);
+                context.moveTo(-33, 33);
+                context.quadraticCurveTo(-25, 25, -20, 30);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+
+                context.restore();
+            },
+            handRight:function(context){
+                context.save()
+                context.translate(this.x-17, this.y-3);
+                context.scale(this.handRightScaleX, this.handRightScaleY);
+                context.rotate(this.handRightRotate * Math.PI / 180);
+
+                context.beginPath();
+                context.arc(0, 0, 3, 0, (Math.PI * 2), true);
+                context.fillStyle = "#000000";
+                context.fill();
+                context.closePath();
+
+                //手臂
+                context.beginPath();
+                context.moveTo(0, 0);
+                context.quadraticCurveTo(-17, 1, 0 - 26, 23);
+                context.quadraticCurveTo(0 - 13, 13, 0 - 3, 0 + 25);
+                context.lineTo(0, 0);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#B21D17";
+                context.fill();
+                context.closePath();
+                //手
+                context.beginPath();
+                context.moveTo(-33, 28);
+                context.quadraticCurveTo(-13, 13, -3, 25);
+                context.lineTo(-3, 33);
+                context.lineTo(-8, 30);
+                context.lineTo(-3, 33);
+                context.quadraticCurveTo(17, 50, -3, 53);
+                context.lineTo(5, 53);
+                context.bezierCurveTo(5, 73, -33, 68, -36, 53);
+                context.lineTo(-36, 43);
+                context.lineTo(-33, 33);
+                context.lineTo(-33, 28);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#FFFFFF";
+                context.fill();
+                context.closePath();
+                //手
+                context.beginPath();
+                context.moveTo(-3, 46);
+                context.lineTo(-5, 56);
+                context.moveTo(-26, 40);
+                context.lineTo(-27, 51);
+                context.moveTo(-16, 40);
+                context.lineTo(-16, 51);
+                context.lineWidth = 3;
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+
+                context.restore();
+            },
+            anniu:function (context){
+                context.save();
+                context.translate(this.x, this.y);
+                context.scale(this.eyeScaleX, this.eyeScaleY);
+                //context.rotate(2 * Math.PI / 180);
+                context.beginPath();
+                context.arc((0 * 2)+60, 0+20, 10, 0, (Math.PI * 2), true);
+                context.fillStyle = "#F5E061";
+                context.fill();
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+                context.restore();
+            },
+            body: function (context) {
+                context.save();
+                context.translate(this.x, this.y);
+                context.scale(this.bodyScaleX, this.bodyScaleY);
+
+                //身体
+                context.beginPath();
+                context.arc(0 - 2, 0 +28, 32, 0, (Math.PI * 2), true);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#B21D17";
+                context.fill();
+                context.closePath();
+
+                //衣服
+                context.beginPath();
+                context.moveTo(0 - 17, 0 - 3);
+                context.bezierCurveTo(0 - 10, 0 - 10, 0 + 2, 0, 0 + 5, 0 + 10);
+                context.lineTo(0 + 20, 0 + 10);
+                context.lineTo(0 + 21, 0 + 3);
+                context.lineTo(0 + 27, 0 + 10);
+                context.quadraticCurveTo(0 + 27, 0 + 23, 0 + 35, 0 + 27);
+                context.bezierCurveTo(0 + 35, 0 + 70, 0 - 37, 0 + 70, 0 - 37, 0 + 30);
+                context.bezierCurveTo(0 - 10, 0 + 40, 0 + 1, 0 + 7, 0 - 17, 0 - 3);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#1D3AFA";
+                context.fill();
+                context.closePath();
+
+                //按钮
+                context.beginPath();
+                context.lineWidth = 1;
+                context.arc(0 + 5, 0 + 28, 10, 0, (Math.PI * 2), true);
+                context.fillStyle = "#F5E061";
+                context.fill();
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+
+                context.restore();
+            },
+            eye:function (context){
+                context.save();
+                context.translate(this.x, this.y);
+                context.scale(this.eyeScaleX, this.eyeScaleY);
+
+                context.beginPath();
+                context.arc((0 * 2)+20, 0-47, 10, 0, (Math.PI * 2), true);
+                context.fillStyle = "#000000";
+                context.fill();
+                context.closePath();
+                
+                context.beginPath();
+                context.moveTo((0 * 2) + 30, 0 - 35);
+                context.quadraticCurveTo((0 * 2) + 40, 0 - 45, (0 * 2) + 60, 0 - 48);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+                
+                context.beginPath();
+                context.arc((0 * 2) + 60, 0 - 55, 8, 0, (Math.PI * 2), true);
+                context.fillStyle = "#000000";
+                context.fill();
+                context.closePath();
+
+                context.beginPath();
+                context.moveTo((0 * 2) - 90, 0 - 20);
+                context.quadraticCurveTo((0 * 2) - 65, 0 - 25, (0 * 2) - 75, 0 - 40);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+
+                context.restore();
+            },
+            hair: function (context) {
+                context.save();
+                context.translate(this.x, this.y);
+                context.scale(this.hairScaleX, this.hairScaleY);
+
+                context.beginPath();
+                context.moveTo(0 - 8, 0 - 35);
+                context.lineTo(0 - 18, 0 - 25);
+                context.lineTo(0 - 33, 0 - 42);
+                context.lineTo(0 - 25, 0 - 55);
+                context.lineTo(0 - 8, 0 - 35);
+                context.fillStyle = "#76471D";
+                context.fill();
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+
+                context.beginPath();
+                context.moveTo(0 + 7, 0 - 5);
+                context.lineTo(0 + 3, 0 - 17);
+                context.lineTo(0 - 3, 0 - 20);
+                context.lineTo(0 - 3, 0 - 34);
+                context.lineTo(0 + 13, 0 - 26);
+                context.lineTo(0 + 18, 0 - 26);
+                context.bezierCurveTo(0 + 18, 0 - 18, 0 + 30, 0 - 12, 0 + 40, 0 - 15);
+                context.lineTo(0 + 32, 0 - 6);
+                context.lineTo(0 + 7, 0 - 5);
+                context.fillStyle = "#76471D";
+                context.fill();
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+
+                if (this.mouthClose) {
+                    context.beginPath();
+                    context.bezierCurveTo(0 + 7, 0 - 5, 0 - 10, 0 - 5, 0 - 3, 0 - 20);
+                    context.lineTo(0 + 3, 0 - 17);
+                    context.fillStyle = "#FF0000";
+                    context.fill();
+                    context.strokeStyle = "#000000";
+                    context.stroke();
+                    context.closePath();
+                }
+
+                context.restore();
+            },
+            head: function (context) {
+                context.save();
+                context.translate(this.x, this.y);
+                context.scale(this.headScaleX, this.headScaleY);
+                //帽子
+                context.beginPath();
+                context.moveTo(0 - 55, 0 - 30);
+                context.bezierCurveTo(0 - 63, 0 - 40, 0 - 59, 0 - 58, 0 - 43, 0 - 60);
+                context.bezierCurveTo(0 - 35, 0 - 100, 0 + 33, 0 - 130, 0 + 30, 0 - 80);
+                context.bezierCurveTo(0 + 65, 0 - 83, 0 + 65, 0 - 60, 0 + 35, 0 - 60);
+                context.lineTo(0 + 30, 0 - 65);
+                context.bezierCurveTo(0 + 30, 0 - 65, 0 - 10, 0 - 45, 0 - 25, 0 - 55);
+                context.lineTo(0 - 33, 0 - 42);
+                context.bezierCurveTo(0 - 40, 0 - 50, 0 - 55, 0 - 40, 0 - 55, 0 - 30);
+                context.fillStyle = "#E83308";
+                context.fill();
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+                //标志
+                context.beginPath();
+                context.moveTo(0 - 25, 0 - 55);
+                context.lineTo(0 + 4, 0 - 73);
+                context.lineTo(0 + 26, 0 - 79);
+                context.arc(0 + 13, 0 - 82, 13, 0, (Math.PI * 0.8), true);
+                context.lineTo(0 - 25, 0 - 55);
+                context.fillStyle = "#FFFFFF";
+                context.fill();
+                context.font = "15px Impact";
+                context.fillStyle = "#D32910";
+                context.fillText("M", 0 + 10, 0 - 78);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.closePath();
+                //脸
+                context.beginPath();
+                context.moveTo(0 - 55, 0 - 30);
+                context.quadraticCurveTo(0 - 55, 0 - 13, 0 - 35, 0 - 13);
+                context.lineTo(0 - 24, 0 - 13);
+                context.lineTo(0 - 15, 0 - 7);
+                context.lineTo(0 + 7, 0 - 5);
+                context.lineTo(0 + 3, 0 - 17);
+                context.lineTo(0 - 3, 0 - 20);
+                context.lineTo(0 - 3, 0 - 34);
+                context.lineTo(0 + 13, 0 - 26);
+                context.lineTo(0 + 18, 0 - 26);
+                context.bezierCurveTo(0 + 40, 0 + 10, 0 + 75, 0 - 55, 0 + 35, 0 - 50);
+                context.lineTo(0 + 35, 0 - 60);
+                context.lineTo(0 + 35, 0 - 65);
+                context.bezierCurveTo(0 + 30, 0 - 65, 0 - 10, 0 - 45, 0 - 25, 0 - 55);
+                context.lineTo(0 - 8, 0 - 35);
+                context.lineTo(0 - 18, 0 - 25);
+                context.lineTo(0 - 33, 0 - 42);
+                context.bezierCurveTo(0 - 40, 0 - 50, 0 - 55, 0 - 40, 0 - 55, 0 - 30);
+                context.strokeStyle = "#000000";
+                context.stroke();
+                context.fillStyle = "#FAD088";
+                context.fill();
+                context.closePath();
+                context.restore();
+            },
+        }
+        
+    </script>
+</body>
+</html>
